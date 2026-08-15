@@ -127,7 +127,14 @@ def _mysql_config_from_url(url):
     }
     ssl_ca = os.environ.get('DB_SSL_CA_PATH')
     if ssl_ca:
+        # Verify the server cert against the given CA bundle (e.g. Render's
+        # system bundle or a downloaded Aiven ca.pem).
         config['OPTIONS']['ssl'] = {'ca': ssl_ca}
+    else:
+        # Always encrypt the connection (Aiven requires TLS) but skip cert
+        # verification unless a CA is provided, since Aiven's certs are signed
+        # by Aiven's own CA which is not in system bundles.
+        config['OPTIONS']['ssl'] = {'verify_mode': False}
     return config
 
 
