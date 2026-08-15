@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+# Use PyMySQL as the MySQL driver (also aliased to MySQLdb so Django's mysql
+# backend works without needing system C libraries such as mysqlclient).
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+except ImportError:
+    pass
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,13 +28,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
+def env_bool(key, default=False):
+    return os.environ.get(key, str(default)).lower() in ('1', 'true', 'yes', 'on')
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-i815%6jce1iwb*(e097!)5blqmgiw8&9-aklzrt=2i=-7v=4^k'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-i815%6jce1iwb*(e097!)5blqmgiw8&9-aklzrt=2i=-7v=4^k')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env_bool('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 
 # Application definition
@@ -38,11 +50,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -55,7 +72,9 @@ ROOT_URLCONF = 'endsem.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'frontend' / 'dist',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,23 +92,69 @@ WSGI_APPLICATION = 'endsem.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+#
+# Local dev uses SQLite by default. In production set DATABASE_URL to a MySQL
+# connection string (e.g. Aiven) like:
+#   mysql://USER:PASSWORD@HOST:PORT/DBNAME
+# and, if the provider requires TLS, set DB_SSL_CA_PATH to a CA certificate file
+# (Aiven certs validate against the system bundle, so /etc/ssl/certs/ca-certificates.crt
+# works on most Linux hosts).
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-DATABASES = {
-    'default': {
+def _mysql_config_from_url(url):
+    from urllib.parse import urlparse
+    u = urlparse(url)
+    config = {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ecommerce_website_database',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',  # Change this to your MySQL server host
-        'PORT': '3306',           # Use an empty string for the default MySQL port (3306)
+        'NAME': u.path.lstrip('/'),
+        'USER': u.username,
+        'PASSWORD': u.password,
+        'HOST': u.hostname,
+        'PORT': u.port or 3306,
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
+    ssl_ca = os.environ.get('DB_SSL_CA_PATH')
+    if ssl_ca:
+        config['OPTIONS']['ssl'] = {'ca': ssl_ca}
+    return config
+
+
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {
+        'default': _mysql_config_from_url(DATABASE_URL),
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
+CORS_ALLOWED_ORIGINS = [o for o in os.environ.get(
+    'DJANGO_CORS_ORIGINS',
+    'http://localhost:5173,http://127.0.0.1:5173',
+).split(',') if o]
+
+CORS_ALLOW_CREDENTIALS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 12,
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
 
@@ -127,16 +192,23 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-import os
-
-BASE_DIR=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-    BASE_DIR,"static"
+    BASE_DIR / 'home' / 'static',
+    BASE_DIR / 'frontend' / 'dist',
 ]
-MEDIA_ROOT =os.path.join(BASE_DIR,'media')
-MEDIA_URL='/media/'
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+    },
+}
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

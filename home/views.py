@@ -5,7 +5,22 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django import forms
+from django.conf import settings
+from django.http import FileResponse, Http404
+from pathlib import Path
 from .models import *
+
+
+def spa(request, path=''):
+    """Serve the built React app (single-page app). Used in production.
+
+    Client-side routes (e.g. /products/3) all return index.html; React Router
+    renders the correct view. API/static/admin/media are matched earlier.
+    """
+    index = settings.BASE_DIR / 'frontend' / 'dist' / 'index.html'
+    if not index.exists():
+        raise Http404('Frontend has not been built. Run `npm run build` in frontend/.')
+    return FileResponse(open(index, 'rb'))
 
 
 # Create your views here.

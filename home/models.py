@@ -35,6 +35,7 @@ class Orders(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,default=None)
     customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    order_date = models.DateTimeField(auto_now_add=True)
 
 class OrderItems(models.Model):
     order_item_id = models.AutoField(primary_key=True)

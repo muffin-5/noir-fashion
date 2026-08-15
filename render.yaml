@@ -1,0 +1,30 @@
+# Render blueprint - deploy the Django + React app as a single web service.
+# See https://render.com/docs/blueprint-spec for more options.
+services:
+  - type: web
+    name: noir-store
+    runtime: python
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: gunicorn endsem.wsgi:application
+    releaseCommand: python manage.py migrate && python manage.py seed
+    healthCheckPath: /api/categories/
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_ALLOWED_HOSTS
+        fromService:
+          name: noir-store
+          type: web
+          property: host
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      # Aiven MySQL: set DATABASE_URL to your service URI, e.g.
+      #   mysql://avnadmin:PASSWORD@host.aivencloud.com:PORT/defaultdb
+      - key: DATABASE_URL
+        sync: false
+      # Aiven enforces TLS. Render's system CA bundle usually validates Aiven
+      # certificates; set DB_SSL_CA_PATH to a CA file only if you hit SSL errors.
+      - key: DB_SSL_CA_PATH
+        sync: false
+        value: /etc/ssl/certs/ca-certificates.crt

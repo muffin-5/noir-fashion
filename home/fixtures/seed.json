@@ -1,0 +1,238 @@
+[
+{
+  "model": "home.categories",
+  "pk": 2,
+  "fields": {
+    "name": "socks"
+  }
+},
+{
+  "model": "home.categories",
+  "pk": 3,
+  "fields": {
+    "name": "jacket"
+  }
+},
+{
+  "model": "home.categories",
+  "pk": 4,
+  "fields": {
+    "name": "watches"
+  }
+},
+{
+  "model": "home.categories",
+  "pk": 5,
+  "fields": {
+    "name": "belts"
+  }
+},
+{
+  "model": "home.categories",
+  "pk": 6,
+  "fields": {
+    "name": "tshirts"
+  }
+},
+{
+  "model": "home.categories",
+  "pk": 7,
+  "fields": {
+    "name": "jeans"
+  }
+},
+{
+  "model": "home.categories",
+  "pk": 8,
+  "fields": {
+    "name": "shirts"
+  }
+},
+{
+  "model": "home.categories",
+  "pk": 9,
+  "fields": {
+    "name": "shoes"
+  }
+},
+{
+  "model": "home.products",
+  "pk": 2,
+  "fields": {
+    "name": "black jeans",
+    "image": "products_img/jeans_r1P16xh.jpg",
+    "price": "199.00",
+    "stock_quantity": 48,
+    "description": "black super hot jeans casual for boys",
+    "category": 7
+  }
+},
+{
+  "model": "home.products",
+  "pk": 3,
+  "fields": {
+    "name": "blue jeans",
+    "image": "products_img/jeans1_A1kxzWe.jpg",
+    "price": "1499.00",
+    "stock_quantity": 20,
+    "description": "jeans for daily use",
+    "category": 7
+  }
+},
+{
+  "model": "home.products",
+  "pk": 4,
+  "fields": {
+    "name": "tshirt",
+    "image": "products_img/tshirt.jpg",
+    "price": "199.00",
+    "stock_quantity": 52,
+    "description": "tshit oversized for summer",
+    "category": 6
+  }
+},
+{
+  "model": "home.products",
+  "pk": 5,
+  "fields": {
+    "name": "Gucci Belt",
+    "image": "products_img/belt_0tMW7WV.jpeg",
+    "price": "9999999.00",
+    "stock_quantity": 1,
+    "description": "Gucci handmade in india",
+    "category": 5
+  }
+},
+{
+  "model": "home.products",
+  "pk": 6,
+  "fields": {
+    "name": "Blue Shirt",
+    "image": "products_img/oversized1_xZ58Ovw.jpeg",
+    "price": "1299.00",
+    "stock_quantity": 48,
+    "description": "casual blue shirts",
+    "category": 8
+  }
+},
+{
+  "model": "home.products",
+  "pk": 7,
+  "fields": {
+    "name": "White Jacket",
+    "image": "products_img/gucci_Q8bT5Ca.jpg",
+    "price": "13999.00",
+    "stock_quantity": 12,
+    "description": "jacket for winter for boys",
+    "category": 3
+  }
+},
+{
+  "model": "home.products",
+  "pk": 8,
+  "fields": {
+    "name": "Blue Jacket",
+    "image": "products_img/jacket_NKBH1KO.jpg",
+    "price": "1509.00",
+    "stock_quantity": 7,
+    "description": "Blue jacket use karo or maze karo",
+    "category": 3
+  }
+},
+{
+  "model": "home.products",
+  "pk": 9,
+  "fields": {
+    "name": "Socks",
+    "image": "products_img/socks_HLb4HUn.jpg",
+    "price": "89.00",
+    "stock_quantity": 45,
+    "description": "Socks raste ka maal saste m",
+    "category": 2
+  }
+},
+{
+  "model": "home.products",
+  "pk": 10,
+  "fields": {
+    "name": "Sports Shoes",
+    "image": "products_img/nike_sVNBrJR.jpeg",
+    "price": "8911.00",
+    "stock_quantity": 46,
+    "description": "Sports shoes for best performance",
+    "category": 9
+  }
+},
+{
+  "model": "home.products",
+  "pk": 11,
+  "fields": {
+    "name": "Red Shirt",
+    "image": "products_img/shirt1_54leg60.jpg",
+    "price": "453.00",
+    "stock_quantity": 54,
+    "description": "Check shirt for daily use",
+    "category": 8
+  }
+},
+{
+  "model": "home.products",
+  "pk": 12,
+  "fields": {
+    "name": "White Shirt",
+    "image": "products_img/shirt2_I5rMog7.jpg",
+    "price": "999.00",
+    "stock_quantity": 15,
+    "description": "Daily use shirts",
+    "category": 8
+  }
+},
+{
+  "model": "home.products",
+  "pk": 13,
+  "fields": {
+    "name": "Titan Watch",
+    "image": "products_img/titan_6y9aFxO.jpg",
+    "price": "1499.00",
+    "stock_quantity": 152,
+    "description": "quality titan watch for special parties",
+    "category": 4
+  }
+},
+{
+  "model": "home.products",
+  "pk": 14,
+  "fields": {
+    "name": "Rolex Watch",
+    "image": "products_img/rolex1_1gyJbjB.jpg",
+    "price": "999999.00",
+    "stock_quantity": 1,
+    "description": "Best expensive quality watch",
+    "category": 4
+  }
+},
+{
+  "model": "home.products",
+  "pk": 15,
+  "fields": {
+    "name": "Nike Shoes",
+    "image": "products_img/shoes2_kbZzobm.jpg",
+    "price": "15339.00",
+    "stock_quantity": 15,
+    "description": "Shoes lo or maze karo",
+    "category": 9
+  }
+},
+{
+  "model": "home.products",
+  "pk": 16,
+  "fields": {
+    "name": "Jordan Shoes",
+    "image": "products_img/shoes_GAEMSzJ.jpg",
+    "price": "8999.00",
+    "stock_quantity": 9,
+    "description": "shoes for quality performance used for celebrities",
+    "category": 9
+  }
+}
+]
