@@ -15,10 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from home import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from home import api_views
@@ -65,8 +66,18 @@ urlpatterns += [
 ]
 
 # Serve uploaded product images in both dev and production (works because media
-# lives in the repo for this demo).
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# lives in the repo for this demo). django.conf.urls.static.static() only
+# returns patterns when DEBUG=True, so add an explicit pattern for production.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    urlpatterns += [
+        re_path(
+            r'^%s(?P<path>.*)$' % settings.MEDIA_URL.lstrip('/'),
+            serve,
+            {'document_root': settings.MEDIA_ROOT},
+        ),
+    ]
 
 # Catch-all: serve the React SPA for client-side routes in production.
 if not settings.DEBUG:
