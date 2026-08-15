@@ -19,12 +19,10 @@ services:
           property: host
       - key: DJANGO_SECRET_KEY
         generateValue: true
-      # Aiven MySQL: set DATABASE_URL to your service URI, e.g.
+      # Aiven enforces TLS; Render's system CA bundle validates Aiven certs.
+      - key: DB_SSL_CA_PATH
+        value: /etc/ssl/certs/ca-certificates.crt
+      # Aiven MySQL: set DATABASE_URL to your Service URI in the Render UI, e.g.
       #   mysql://avnadmin:PASSWORD@host.aivencloud.com:PORT/defaultdb
       - key: DATABASE_URL
         sync: false
-      # Aiven enforces TLS. Render's system CA bundle usually validates Aiven
-      # certificates; set DB_SSL_CA_PATH to a CA file only if you hit SSL errors.
-      - key: DB_SSL_CA_PATH
-        sync: false
-        value: /etc/ssl/certs/ca-certificates.crt
