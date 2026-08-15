@@ -7,7 +7,7 @@ services:
     plan: free
     buildCommand: ./build.sh
     startCommand: gunicorn endsem.wsgi:application
-    releaseCommand: python manage.py migrate && python manage.py seed
+    preDeployCommand: python manage.py migrate && python manage.py seed
     healthCheckPath: /api/categories/
     envVars:
       - key: DJANGO_DEBUG
