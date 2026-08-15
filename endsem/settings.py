@@ -118,7 +118,12 @@ def _mysql_config_from_url(url):
         'PASSWORD': u.password,
         'HOST': u.hostname,
         'PORT': u.port or 3306,
-        'OPTIONS': {'charset': 'utf8mb4'},
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'connect_timeout': 15,
+            'read_timeout': 60,
+            'write_timeout': 60,
+        },
     }
     ssl_ca = os.environ.get('DB_SSL_CA_PATH')
     if ssl_ca:
