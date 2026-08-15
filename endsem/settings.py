@@ -18,6 +18,14 @@ import os
 try:
     import pymysql
     pymysql.install_as_MySQLdb()
+
+    # PyMySQL emulates the legacy mysqlclient API but reports version 1.4.6,
+    # which Django 6 rejects (it requires mysqlclient >= 2.2.1). The rest of
+    # the mysqlclient API that Django uses is implemented by PyMySQL, so only
+    # the reported version needs to be faked.
+    import MySQLdb
+    MySQLdb.version_info = (2, 2, 1, 'final', 0)
+    MySQLdb.__version__ = '2.2.1'
 except ImportError:
     pass
 
