@@ -6,8 +6,7 @@ services:
     runtime: python
     plan: free
     buildCommand: ./build.sh
-    startCommand: gunicorn endsem.wsgi:application
-    preDeployCommand: python manage.py migrate && python manage.py seed
+    startCommand: python manage.py migrate && python manage.py seed && gunicorn endsem.wsgi:application
     healthCheckPath: /api/categories/
     envVars:
       - key: DJANGO_DEBUG
