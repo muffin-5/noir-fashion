@@ -88,7 +88,7 @@ export default function Checkout() {
                 </div>
                 <div className="field">
                   <label>Phone</label>
-                  <input type="number" value={form.phone_no} onChange={set('phone_no')} required />
+                  <input type="tel" inputMode="numeric" value={form.phone_no} onChange={set('phone_no')} required />
                 </div>
               </div>
               <div className="field">

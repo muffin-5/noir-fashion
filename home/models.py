@@ -22,7 +22,7 @@ class Customers(models.Model):
     customer_id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    phone_no = models.IntegerField()
+    phone_no = models.CharField(max_length=20)
     email = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     shipping_address = models.TextField()

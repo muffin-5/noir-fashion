@@ -122,7 +122,7 @@ class CheckoutSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=255)
     last_name = serializers.CharField(max_length=255)
     email = serializers.EmailField()
-    phone_no = serializers.IntegerField()
+    phone_no = serializers.CharField(max_length=20)
     shipping_address = serializers.CharField()
     billing_address = serializers.CharField(required=False, allow_blank=True)
 
