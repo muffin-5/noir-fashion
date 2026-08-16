@@ -96,7 +96,7 @@ export default function Checkout() {
                 <textarea value={form.shipping_address} onChange={set('shipping_address')} required />
               </div>
               <button className="btn btn-solid btn-block" disabled={placing}>
-                {placing ? 'Placing order…' : `Place Order · &#8377;${(subtotal + (subtotal >= 2000 ? 0 : 149)).toLocaleString('en-IN')}`}
+                {placing ? 'Placing order…' : `Place Order · ₹${(subtotal + (subtotal >= 2000 ? 0 : 149)).toLocaleString('en-IN')}`}
               </button>
             </form>
 
@@ -110,7 +110,7 @@ export default function Checkout() {
               ))}
               <div className="summary-row">
                 <span>Shipping</span>
-                <span>{subtotal >= 2000 ? 'Free' : '&#8377;149'}</span>
+                <span>{subtotal >= 2000 ? 'Free' : '₹149'}</span>
               </div>
               <div className="summary-total">
                 <span>Total ({count} item{count === 1 ? '' : 's'})</span>

@@ -76,7 +76,7 @@ export default function Cart() {
               </div>
               <div className="summary-row">
                 <span>Shipping</span>
-                <span>{subtotal >= 2000 ? 'Free' : '&#8377;149'}</span>
+                <span>{subtotal >= 2000 ? 'Free' : '₹149'}</span>
               </div>
               <div className="summary-total">
                 <span>Total</span>
