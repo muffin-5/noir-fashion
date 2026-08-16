@@ -1,4 +1,4 @@
-# NOIR — Fashion E-Commerce
+# NOIR - Fashion E-Commerce
 
 A full-stack fashion e-commerce platform. **Django REST Framework** powers a
 RESTful JSON API (JWT auth, catalog, cart, checkout, reviews, order history) and
